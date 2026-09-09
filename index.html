@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>权限管理</title>
+<title>部门管理</title>
 <style>
 body{
     color:black;
@@ -34,7 +34,7 @@ th{
     left:35%;
     border:2px solid black;
     background:white;
-    width:480px;
+    width:450px;
 }
 .mask.show{
     display:block;
@@ -77,20 +77,13 @@ button{
 <body>
 <div>
     <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h1>权限管理</h1>
+        <h1>部门管理</h1>
         <button onclick="showModal('add')">+ 新增</button>
     </div>
     <hr>
     <div class="search-box">
         <label>关键字：</label>
-        <input type="text" placeholder="权限编码 / 权限名称">
-        <label>类型：</label>
-        <select>
-            <option>全部</option>
-            <option>页面</option>
-            <option>按钮</option>
-            <option>接口</option>
-        </select>
+        <input type="text" placeholder="部门编码 / 部门名称">
         <button>查询</button>
         <button>重置</button>
     </div>
@@ -98,19 +91,19 @@ button{
 <table>
     <tr>
         <th>ID</th>
-        <th>权限编码</th>
-        <th>权限名称</th>
-        <th>权限类型</th>
-        <th>父级权限</th>
+        <th>部门编码</th>
+        <th>部门名称</th>
+        <th>上级部门</th>
+        <th>排序</th>
         <th>状态</th>
         <th>操作</th>
     </tr>
     <tr>
         <td>1</td>
-        <td>user:view</td>
-        <td>用户管理页面</td>
-        <td>页面</td>
+        <td>HQ</td>
+        <td>总公司</td>
         <td>-</td>
+        <td>1</td>
         <td>启用</td>
         <td>
             <a onclick="showModal('edit')">编辑</a>
@@ -119,10 +112,10 @@ button{
     </tr>
     <tr>
         <td>2</td>
-        <td>user:add</td>
-        <td>新增用户按钮</td>
-        <td>按钮</td>
-        <td>用户管理页面</td>
+        <td>TECH</td>
+        <td>技术部</td>
+        <td>总公司</td>
+        <td>2</td>
         <td>启用</td>
         <td>
             <a onclick="showModal('edit')">编辑</a>
@@ -131,10 +124,22 @@ button{
     </tr>
     <tr>
         <td>3</td>
-        <td>user:delete</td>
-        <td>删除用户接口</td>
-        <td>接口</td>
-        <td>用户管理页面</td>
+        <td>MARKET</td>
+        <td>市场部</td>
+        <td>总公司</td>
+        <td>3</td>
+        <td>启用</td>
+        <td>
+            <a onclick="showModal('edit')">编辑</a>
+            <a onclick="showModal('del')">删除</a>
+        </td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>DEV</td>
+        <td>研发组</td>
+        <td>技术部</td>
+        <td>1</td>
         <td>禁用</td>
         <td>
             <a onclick="showModal('edit')">编辑</a>
@@ -146,36 +151,28 @@ button{
     <button>上一页</button>
     <button>1</button>
     <button>2</button>
-    <button>3</button>
     <button>下一页</button>
 </div>
 </div>
 
 <div class="mask" id="m-add">
-    <div class="modal-head" id="add-title">新增权限</div>
+    <div class="modal-head" id="add-title">新增部门</div>
     <div class="modal-body">
         <div class="modal-row">
-            <label>*权限编码：</label>
-            <input placeholder="必填，不能重复，如user:add">
+            <label>*部门编码：</label>
+            <input placeholder="必填，不能重复">
         </div>
         <div class="modal-row">
-            <label>*权限名称：</label>
+            <label>*部门名称：</label>
             <input placeholder="必填">
         </div>
         <div class="modal-row">
-            <label>*权限类型：</label>
+            <label>上级部门：</label>
             <select>
-                <option>页面</option>
-                <option>按钮</option>
-                <option>接口</option>
-            </select>
-        </div>
-        <div class="modal-row">
-            <label>父级权限：</label>
-            <select>
-                <option>无（顶级权限）</option>
-                <option>用户管理页面</option>
-                <option>角色管理页面</option>
+                <option>无（顶级部门）</option>
+                <option>总公司</option>
+                <option>技术部</option>
+                <option>市场部</option>
             </select>
         </div>
         <div class="modal-row">
@@ -189,6 +186,10 @@ button{
                 <option>禁用</option>
             </select>
         </div>
+        <div class="modal-row">
+            <label>描述：</label>
+            <textarea rows="2" placeholder="选填"></textarea>
+        </div>
     </div>
     <div class="modal-foot">
         <button onclick="hideModal()">取消</button>
@@ -199,7 +200,7 @@ button{
 <div class="mask" id="m-del">
     <div class="modal-head">删除确认</div>
     <div class="modal-body">
-        <p>确定要删除权限「用户管理页面」吗？<br>该权限下还有子权限，不能删除！</p>
+        <p>确定要删除部门「技术部」吗？<br>该部门下还有子部门，不能删除！</p>
     </div>
     <div class="modal-foot">
         <button onclick="hideModal()">取消</button>
@@ -211,7 +212,7 @@ button{
 function showModal(type){
     document.getElementById('m-' + type).classList.add("show");
     if(type === 'edit'){
-        document.getElementById('add-title').innerText = "编辑权限";
+        document.getElementById('add-title').innerText = "编辑部门";
     }
 }
 function hideModal(){
