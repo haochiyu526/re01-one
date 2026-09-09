@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>角色管理</title>
+<style>
+body{
+    color:black;
+    padding:20px;
+}
+table{
+    border-collapse: collapse;
+    width:100%;
+}
+table,th,td{
+    border:1px solid black;
+}
+th{
+    background:#eeeeee;
+}
+.search-box{
+    border:1px dashed #666;
+    padding:15px;
+    margin:10px 0;
+}
+.page-footer{
+    text-align:right;
+    margin-top:10px;
+}
+.mask{
+    display: none;
+    position: fixed;
+    top:50px;
+    left:35%;
+    border:2px solid black;
+    background:white;
+    width:450px;
+}
+.mask.show{
+    display:block;
+}
+.modal-head{
+    background:#eeeeee;
+    padding:10px;
+    border-bottom:1px solid black;
+    font-size:20px;
+    font-weight:bold;
+}
+.modal-body{
+    padding:20px;
+}
+.modal-row{
+    margin-bottom:14px;
+}
+.modal-row label{
+    display:inline-block;
+    width:90px;
+}
+.modal-row input,.modal-row select,.modal-row textarea{
+    width:280px;
+    padding:4px;
+    border:1px dashed #666;
+}
+.modal-foot{
+    padding:12px 20px;
+    text-align:right;
+    border-top:1px dashed #666;
+}
+button{
+    border:2px solid black;
+    padding:5px 15px;
+    background:#fff;
+    margin:0 4px;
+}
+</style>
+</head>
+<body>
+<div>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h1>角色管理</h1>
+        <button onclick="showModal('add')">+ 新增</button>
+    </div>
+    <hr>
+    <div class="search-box">
+        <label>关键字：</label>
+        <input type="text" placeholder="角色编码 / 角色名称">
+        <button>查询</button>
+        <button>重置</button>
+    </div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>角色编码</th>
+        <th>角色名称</th>
+        <th>描述</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>admin</td>
+        <td>管理员</td>
+        <td>系统管理员，拥有全部权限</td>
+        <td>启用</td>
+        <td>
+            <a onclick="showModal('edit')">编辑</a>
+            <a onclick="showModal('del')">删除</a>
+        </td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>user</td>
+        <td>普通用户</td>
+        <td>普通用户，只有基础权限</td>
+        <td>启用</td>
+        <td>
+            <a onclick="showModal('edit')">编辑</a>
+            <a onclick="showModal('del')">删除</a>
+        </td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>dept_manager</td>
+        <td>部门主管</td>
+        <td>管理本部门用户和数据</td>
+        <td>禁用</td>
+        <td>
+            <a onclick="showModal('edit')">编辑</a>
+            <a onclick="showModal('del')">删除</a>
+        </td>
+    </tr>
+</table>
+<div class="page-footer">
+    <button>上一页</button>
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>下一页</button>
+</div>
+</div>
+
+<div class="mask" id="m-add">
+    <div class="modal-head" id="add-title">新增角色</div>
+    <div class="modal-body">
+        <div class="modal-row">
+            <label>*角色编码：</label>
+            <input placeholder="必填，不能重复">
+        </div>
+        <div class="modal-row">
+            <label>*角色名称：</label>
+            <input placeholder="必填">
+        </div>
+        <div class="modal-row">
+            <label>描述：</label>
+            <textarea rows="3" placeholder="选填"></textarea>
+        </div>
+        <div class="modal-row">
+            <label>状态：</label>
+            <select>
+                <option>启用</option>
+                <option>禁用</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-foot">
+        <button onclick="hideModal()">取消</button>
+        <button onclick="hideModal()">确定</button>
+    </div>
+</div>
+
+<div class="mask" id="m-del">
+    <div class="modal-head">删除确认</div>
+    <div class="modal-body">
+        <p>确定要删除角色「admin」吗？删除不可恢复！</p>
+    </div>
+    <div class="modal-foot">
+        <button onclick="hideModal()">取消</button>
+        <button onclick="hideModal()">确定删除</button>
+    </div>
+</div>
+
+<script>
+function showModal(type){
+    document.getElementById('m-' + type).classList.add("show");
+    if(type === 'edit'){
+        document.getElementById('add-title').innerText = "编辑角色";
+    }
+}
+function hideModal(){
+    document.getElementById('m-add').classList.remove("show");
+    document.getElementById('m-del').classList.remove("show");
+}
+</script>
+
+</body>
+</html>

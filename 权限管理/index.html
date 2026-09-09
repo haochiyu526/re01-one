@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>权限管理</title>
+<style>
+body{
+    color:black;
+    padding:20px;
+}
+table{
+    border-collapse: collapse;
+    width:100%;
+}
+table,th,td{
+    border:1px solid black;
+}
+th{
+    background:#eeeeee;
+}
+.search-box{
+    border:1px dashed #666;
+    padding:15px;
+    margin:10px 0;
+}
+.page-footer{
+    text-align:right;
+    margin-top:10px;
+}
+.mask{
+    display: none;
+    position: fixed;
+    top:50px;
+    left:35%;
+    border:2px solid black;
+    background:white;
+    width:480px;
+}
+.mask.show{
+    display:block;
+}
+.modal-head{
+    background:#eeeeee;
+    padding:10px;
+    border-bottom:1px solid black;
+    font-size:20px;
+    font-weight:bold;
+}
+.modal-body{
+    padding:20px;
+}
+.modal-row{
+    margin-bottom:14px;
+}
+.modal-row label{
+    display:inline-block;
+    width:90px;
+}
+.modal-row input,.modal-row select,.modal-row textarea{
+    width:280px;
+    padding:4px;
+    border:1px dashed #666;
+}
+.modal-foot{
+    padding:12px 20px;
+    text-align:right;
+    border-top:1px dashed #666;
+}
+button{
+    border:2px solid black;
+    padding:5px 15px;
+    background:#fff;
+    margin:0 4px;
+}
+</style>
+</head>
+<body>
+<div>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h1>权限管理</h1>
+        <button onclick="showModal('add')">+ 新增</button>
+    </div>
+    <hr>
+    <div class="search-box">
+        <label>关键字：</label>
+        <input type="text" placeholder="权限编码 / 权限名称">
+        <label>类型：</label>
+        <select>
+            <option>全部</option>
+            <option>页面</option>
+            <option>按钮</option>
+            <option>接口</option>
+        </select>
+        <button>查询</button>
+        <button>重置</button>
+    </div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>权限编码</th>
+        <th>权限名称</th>
+        <th>权限类型</th>
+        <th>父级权限</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>user:view</td>
+        <td>用户管理页面</td>
+        <td>页面</td>
+        <td>-</td>
+        <td>启用</td>
+        <td>
+            <a onclick="showModal('edit')">编辑</a>
+            <a onclick="showModal('del')">删除</a>
+        </td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>user:add</td>
+        <td>新增用户按钮</td>
+        <td>按钮</td>
+        <td>用户管理页面</td>
+        <td>启用</td>
+        <td>
+            <a onclick="showModal('edit')">编辑</a>
+            <a onclick="showModal('del')">删除</a>
+        </td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>user:delete</td>
+        <td>删除用户接口</td>
+        <td>接口</td>
+        <td>用户管理页面</td>
+        <td>禁用</td>
+        <td>
+            <a onclick="showModal('edit')">编辑</a>
+            <a onclick="showModal('del')">删除</a>
+        </td>
+    </tr>
+</table>
+<div class="page-footer">
+    <button>上一页</button>
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>下一页</button>
+</div>
+</div>
+
+<div class="mask" id="m-add">
+    <div class="modal-head" id="add-title">新增权限</div>
+    <div class="modal-body">
+        <div class="modal-row">
+            <label>*权限编码：</label>
+            <input placeholder="必填，不能重复，如user:add">
+        </div>
+        <div class="modal-row">
+            <label>*权限名称：</label>
+            <input placeholder="必填">
+        </div>
+        <div class="modal-row">
+            <label>*权限类型：</label>
+            <select>
+                <option>页面</option>
+                <option>按钮</option>
+                <option>接口</option>
+            </select>
+        </div>
+        <div class="modal-row">
+            <label>父级权限：</label>
+            <select>
+                <option>无（顶级权限）</option>
+                <option>用户管理页面</option>
+                <option>角色管理页面</option>
+            </select>
+        </div>
+        <div class="modal-row">
+            <label>排序：</label>
+            <input placeholder="数字越小越靠前">
+        </div>
+        <div class="modal-row">
+            <label>状态：</label>
+            <select>
+                <option>启用</option>
+                <option>禁用</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-foot">
+        <button onclick="hideModal()">取消</button>
+        <button onclick="hideModal()">确定</button>
+    </div>
+</div>
+
+<div class="mask" id="m-del">
+    <div class="modal-head">删除确认</div>
+    <div class="modal-body">
+        <p>确定要删除权限「用户管理页面」吗？<br>该权限下还有子权限，不能删除！</p>
+    </div>
+    <div class="modal-foot">
+        <button onclick="hideModal()">取消</button>
+        <button onclick="hideModal()">确定删除</button>
+    </div>
+</div>
+
+<script>
+function showModal(type){
+    document.getElementById('m-' + type).classList.add("show");
+    if(type === 'edit'){
+        document.getElementById('add-title').innerText = "编辑权限";
+    }
+}
+function hideModal(){
+    document.getElementById('m-add').classList.remove("show");
+    document.getElementById('m-del').classList.remove("show");
+}
+</script>
+
+</body>
+</html>
