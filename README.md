@@ -2,8 +2,6 @@
 ## 用户管理
 -任务类型：原型设计
 -原型图：
-https://haochiyu526.github.io/re01-one/
-
 ![用户管理界面1](images/用户管理界面1.png)
 
 ![用户管理界面2](images/用户管理界面2.png)
