@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>用户管理</title>
+<title>权限管理</title>
 <style>
 body{
     color:black;
@@ -34,7 +34,7 @@ th{
     left:35%;
     border:2px solid black;
     background:white;
-    width:450px;
+    width:480px;
 }
 .mask.show{
     display:block;
@@ -56,7 +56,7 @@ th{
     display:inline-block;
     width:90px;
 }
-.modal-row input,.modal-row select{
+.modal-row input,.modal-row select,.modal-row textarea{
     width:280px;
     padding:4px;
     border:1px dashed #666;
@@ -77,13 +77,20 @@ button{
 <body>
 <div>
     <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h1>用户管理</h1>
+        <h1>权限管理</h1>
         <button onclick="showModal('add')">+ 新增</button>
     </div>
     <hr>
     <div class="search-box">
         <label>关键字：</label>
-        <input type="text" placeholder="用户名 / 昵称">
+        <input type="text" placeholder="权限编码 / 权限名称">
+        <label>类型：</label>
+        <select>
+            <option>全部</option>
+            <option>页面</option>
+            <option>按钮</option>
+            <option>接口</option>
+        </select>
         <button>查询</button>
         <button>重置</button>
     </div>
@@ -91,19 +98,19 @@ button{
 <table>
     <tr>
         <th>ID</th>
-        <th>用户名</th>
-        <th>昵称</th>
-        <th>邮箱</th>
-        <th>手机号</th>
+        <th>权限编码</th>
+        <th>权限名称</th>
+        <th>权限类型</th>
+        <th>父级权限</th>
         <th>状态</th>
         <th>操作</th>
     </tr>
     <tr>
         <td>1</td>
-        <td>zhangsan</td>
-        <td>张三</td>
-        <td>zhangsan@qq.com</td>
-        <td>13800000000</td>
+        <td>user:view</td>
+        <td>用户管理页面</td>
+        <td>页面</td>
+        <td>-</td>
         <td>启用</td>
         <td>
             <a onclick="showModal('edit')">编辑</a>
@@ -112,10 +119,10 @@ button{
     </tr>
     <tr>
         <td>2</td>
-        <td>lisi</td>
-        <td>李四</td>
-        <td>lisi@qq.com</td>
-        <td>13900000000</td>
+        <td>user:add</td>
+        <td>新增用户按钮</td>
+        <td>按钮</td>
+        <td>用户管理页面</td>
         <td>启用</td>
         <td>
             <a onclick="showModal('edit')">编辑</a>
@@ -124,10 +131,10 @@ button{
     </tr>
     <tr>
         <td>3</td>
-        <td>wangwu</td>
-        <td>王五</td>
-        <td>wangwu@163.com</td>
-        <td>13700000000</td>
+        <td>user:delete</td>
+        <td>删除用户接口</td>
+        <td>接口</td>
+        <td>用户管理页面</td>
         <td>禁用</td>
         <td>
             <a onclick="showModal('edit')">编辑</a>
@@ -145,23 +152,35 @@ button{
 </div>
 
 <div class="mask" id="m-add">
-    <div class="modal-head" id="add-title">新增用户</div>
+    <div class="modal-head" id="add-title">新增权限</div>
     <div class="modal-body">
         <div class="modal-row">
-            <label>*用户名：</label>
-            <input placeholder="必填，不能重复">
+            <label>*权限编码：</label>
+            <input placeholder="必填，不能重复，如user:add">
         </div>
         <div class="modal-row">
-            <label>昵称：</label>
-            <input>
+            <label>*权限名称：</label>
+            <input placeholder="必填">
         </div>
         <div class="modal-row">
-            <label>邮箱：</label>
-            <input>
+            <label>*权限类型：</label>
+            <select>
+                <option>页面</option>
+                <option>按钮</option>
+                <option>接口</option>
+            </select>
         </div>
         <div class="modal-row">
-            <label>手机号：</label>
-            <input>
+            <label>父级权限：</label>
+            <select>
+                <option>无（顶级权限）</option>
+                <option>用户管理页面</option>
+                <option>角色管理页面</option>
+            </select>
+        </div>
+        <div class="modal-row">
+            <label>排序：</label>
+            <input placeholder="数字越小越靠前">
         </div>
         <div class="modal-row">
             <label>状态：</label>
@@ -180,7 +199,7 @@ button{
 <div class="mask" id="m-del">
     <div class="modal-head">删除确认</div>
     <div class="modal-body">
-        <p>确定要删除用户「zhangsan」吗？删除不可恢复！</p>
+        <p>确定要删除权限「用户管理页面」吗？<br>该权限下还有子权限，不能删除！</p>
     </div>
     <div class="modal-foot">
         <button onclick="hideModal()">取消</button>
@@ -192,7 +211,7 @@ button{
 function showModal(type){
     document.getElementById('m-' + type).classList.add("show");
     if(type === 'edit'){
-        document.getElementById('add-title').innerText = "编辑用户";
+        document.getElementById('add-title').innerText = "编辑权限";
     }
 }
 function hideModal(){
